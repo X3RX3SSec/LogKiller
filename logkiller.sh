@@ -1,12 +1,10 @@
 #!/bin/bash
 
-# Define color codes
 MAGENTA="\e[35m"
 FLUO_GREEN="\e[92m"
 RED="\e[31m"
 RESET="\e[0m"
 
-# Log Killer Banner
 echo -e "${MAGENTA}"
 cat << "EOF"
  ______               ______ _________________
@@ -24,7 +22,6 @@ echo ""
 echo -e "${MAGENTA}Tip: Run './logkiller.sh --help' to see all available options.${RESET}"
 echo ""
 
-# Check user privilege level
 if [[ $EUID -ne 0 ]]; then
     echo -e "Running as a regular user. Some logs require root access to delete."
     echo "For full system cleanup, rerun with: sudo $0"
@@ -34,7 +31,6 @@ else
     USER_LEVEL="full"
 fi
 
-# Display Help Menu
 if [[ "$1" == "--help" ]]; then
     echo -e "${MAGENTA}Log Killer Help Menu:${RESET}"
     echo "Usage: ./logkiller.sh [OPTIONS]"
@@ -54,7 +50,6 @@ if [[ "$1" == "--help" ]]; then
     exit 0
 fi
 
-# Check for mode flags
 SELF_DESTRUCT="false"
 LOGGING="false"
 BACKUP="false"
@@ -89,7 +84,6 @@ for arg in "$@"; do
     esac
 done
 
-# Ask user if no flags were passed
 if [[ -z "$CLEAR_ALL" ]]; then
     echo ""
     echo "Log cleanup options:"
@@ -106,7 +100,6 @@ echo ""
 echo "Processing selections..."
 sleep 2
 
-# Define clear or shred command
 if [[ "$DELETE_METHOD" =~ ^[Ss]$ ]]; then
     DELETE_CMD="shred -u"
     echo "Secure delete enabled: Logs will be permanently shredded."
@@ -115,7 +108,6 @@ else
     echo "Truncate enabled: Logs will be cleared but recoverable."
 fi
 
-# Function to process logs
 process_logs() {
     local path=$1
     if [[ "$DRY_RUN" == "true" ]]; then
@@ -127,7 +119,7 @@ process_logs() {
     fi
 }
 
-# Targeted log directories
+# Current log directories. DM me on Instagram for more
 LOG_FILES=(
     ~/.bash_history /home/*/.bash_history
     /var/log/* /tmp/* /var/tmp/*
@@ -142,15 +134,12 @@ LOG_FILES=(
     /var/log/samba/* /var/log/sshd.log
 )
 
-# Process logs
 for log in "${LOG_FILES[@]}"; do
     process_logs "$log"
 done
 
-# Completion message
 echo -e "${MAGENTA}Log cleanup complete.${RESET}"
 
-# Self-destruct mode
 if [[ "$SELF_DESTRUCT" == "true" ]]; then
     echo -e "${RED}Self-destructing script...${RESET}"
     rm -- "$0"
