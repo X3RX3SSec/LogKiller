@@ -1,11 +1,15 @@
 # LogKiller
 Simple Log Killer for various Linux systems
 
+![Screenshot_20250220-074631_Termux (1)_1](https://github.com/user-attachments/assets/1a38fa9a-6a74-425d-8acf-0dc006452ab6)
+
+
 🔹 How to Use LogKiller👇
 ./logkiller.sh --help
 
 2️⃣ Auto-Run Mode (--silent)
 Runs without prompts, wipes all logs securely.
+
 ./logkiller.sh --silent
 
 3️⃣ Dry-Run Mode (--dry-run)
